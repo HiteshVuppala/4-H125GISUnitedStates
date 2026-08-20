@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New England 4-H 125th GIS Map</title>
+  <link rel="icon" type="image/png" href="newengland4h.png">
+  <style>
+    :root {
+      --green: #557c50;
+      --dark-green: #315b38;
+      --cream: #f7f4e9;
+      --pale: #e7eddf;
+      --sage: #d4dfca;
+      --text: #27352a;
+      --muted: #657265;
+      --white: #fffdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    section { scroll-margin-top: 30px; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 70px 7%;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(255,255,255,.65) 0 75px, transparent 76px),
+        linear-gradient(135deg, #faf7ee 0%, #edf2e5 100%);
+    }
+
+    .container {
+      width: min(1120px, 100%);
+      margin: auto;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--pale);
+      color: var(--dark-green);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .7px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(45px, 6vw, 76px);
+      line-height: .98;
+      letter-spacing: -3px;
+      color: var(--dark-green);
+      margin-bottom: 22px;
+    }
+
+    h1 span { color: var(--green); }
+
+    .hero-text {
+      max-width: 550px;
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(49,91,56,.15);
+    }
+
+    .primary { background: var(--green); color: white; }
+    .secondary {
+      background: white;
+      color: var(--dark-green);
+      border: 1px solid #cbd7c3;
+    }
+
+    .map-card {
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(79,127,74,.12);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 24px 70px rgba(49,92,53,.12);
+    }
+
+    .map-card img {
+      display: block;
+      width: 100%;
+      border-radius: 18px;
+    }
+
+    .caption {
+      text-align: center;
+      padding: 14px 5px 0;
+      color: #7b8878;
+      font-size: 13px;
+    }
+
+    .section {
+      padding: 105px 7%;
+    }
+
+    .section.alt { background: #eef2e8; }
+
+    .section-heading {
+      max-width: 720px;
+      margin-bottom: 45px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: var(--dark-green);
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      margin-bottom: 15px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid #dce4d5;
+      border-radius: 20px;
+      padding: 30px;
+    }
+
+    .number {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--pale);
+      color: var(--dark-green);
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: var(--dark-green);
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 55px;
+      align-items: start;
+    }
+
+    .list-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 34px;
+      border: 1px solid #dce4d5;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    li {
+      padding-left: 25px;
+      position: relative;
+    }
+
+    li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .quote {
+      margin-top: 28px;
+      padding: 25px 28px;
+      border-left: 4px solid var(--green);
+      background: #e9eee3;
+      border-radius: 0 15px 15px 0;
+      color: var(--dark-green);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .help-card {
+      background: var(--white);
+      border: 1px solid #dce4d5;
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .help-card a {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--green);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .bottom-banner {
+      text-align: center;
+      padding: 85px 7%;
+      background: var(--dark-green);
+      color: white;
+    }
+
+    .bottom-banner h2 {
+      color: white;
+      margin-bottom: 15px;
+    }
+
+    .bottom-banner p {
+      max-width: 680px;
+      margin: auto auto 25px;
+      color: #dce8d8;
+    }
+
+    .contact {
+      padding: 90px 7%;
+      background: #f3f1e7;
+    }
+
+    .contact-card {
+      max-width: 900px;
+      margin: auto;
+      background: var(--white);
+      border: 1px solid #d9e1d3;
+      border-radius: 28px;
+      padding: 42px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      box-shadow: 0 18px 50px rgba(49,92,53,.08);
+    }
+
+    .contact-card .label {
+      color: var(--green);
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      margin-bottom: 8px;
+    }
+
+    .contact-card h2 {
+      font-size: 36px;
+    }
+
+    .contact-info {
+      color: var(--muted);
+    }
+
+    .contact-info strong {
+      color: var(--dark-green);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: var(--dark-green);
+      color: #cbd9c6;
+      font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .hero-grid, .two-col, .contact-card { grid-template-columns: 1fr; }
+      .steps, .help-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 50px; }
+      .section { padding: 75px 6%; }
+      h1 { letter-spacing: -2px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="tag">125 YEARS OF NEW ENGLAND 4-H</div>
+        <h1>Help Put New England <span>4-H</span> History on the Map</h1>
+        <p class="hero-text">
+          This project uses GIS to collect, organize, and visualize the people,
+          places, projects, and memories that have helped shape 4-H communities.
+          Explore the map and help add another story to the record.
+        </p>
+
+        <div class="buttons">
+          <a class="button primary"
+             href="https://4-h.maps.arcgis.com/apps/instant/atlas/index.html?appid=61647d2768644865918810f714a2e692&webmap=b1fea5e3f40744aba8341c173220b580"
+             target="_blank" rel="noopener">
+            View 4-H History Map
+          </a>
+
+          <a class="button secondary"
+             href="https://survey123.arcgis.com/share/dffd83fe7fc2405995ee7b7bc59e203b"
+             target="_blank" rel="noopener">
+            Submit a County Story
+          </a>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <img src="newenglanddecorated.jpg" alt="Illustrated map of New England with a 4-H clover">
+        <div class="caption">GIS • Mapping • 4-H • Community</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW YOU CAN HELP -->
+  <section class="section" id="help">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Three simple steps</div>
+        <h2>How You Can Help</h2>
+        <p>Anyone connected to 4-H can help document a meaningful part of its history.</p>
+      </div>
+
+      <div class="steps">
+        <div class="card">
+          <div class="number">1</div>
+          <h3>Find a Story</h3>
+          <p>Look for a memorable person, place, club, event, project, photograph, or milestone from your local 4-H community.</p>
+        </div>
+
+        <div class="card">
+          <div class="number">2</div>
+          <h3>Check the Details</h3>
+          <p>Gather the who, what, when, where, why, evidence, impact, and permission to share the materials. </p>
+        </div>
+
+        <div class="card">
+          <div class="number">3</div>
+          <h3>Share It</h3>
+          <p>Submit the information and encourage another 4-H member or county to contribute.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT BELONGS -->
+  <section class="section alt">
+    <div class="container two-col">
+      <div class="section-heading">
+        <div class="eyebrow">
+        </div>
+        <h2>What Belongs on the Map?</h2>
+        <p>If it shaped 4-H in your community, it belongs in the record.</p>
+      </div>
+
+      <div class="list-card">
+        <ul>
+          <li>Camps and fairgrounds</li>
+          <li>Meeting places and Extension offices</li>
+          <li>Leaders and volunteers </li>
+          <li>Early clubs, projects</li>
+          <li>Photographs, artifacts, and records</li>
+          <li>Oral histories and community memories</li>
+          <li>Important accomplishments and local impact</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY THIS MATTERS -->
+  <section class="section">
+    <div class="container two-col">
+      <div>
+        <div class="eyebrow">Impact</div>
+        <h2>Why This Matters</h2>
+        <p class="section-heading">
+          Mapping history makes local stories easier to discover and gives future
+          generations a way to learn from the people and communities that came before them.
+        </p>
+      </div>
+
+      <div class="list-card">
+        <ul>
+          <li>Connects generations</li>
+          <li>Preserves important local history</li>
+          <li>Honors volunteers and community leaders</li>
+          <li>Introduces young people to GIS and digital mapping</li>
+          <li>Turns technology into a service for real communities</li>
+        </ul>
+
+        <div class="quote">
+          Every story adds another piece to the larger picture of 4-H and the
+          communities it has served.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAYS TO HELP -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-heading">
+        <div class="eyebrow">Take action</div>
+        <h2>Ways YOU can Support the Mission</h2>
+        <p>Choose an action that fits you and help preserve New England's 4-H History.</p>
+      </div>
+
+      <div class="help-grid">
+        <div class="help-card">
+          <h3>Share a Story</h3>
+          <p>Have a verified historical story or local 4-H memory? Add it to the project.</p>
+          <a href="https://4-h.maps.arcgis.com/apps/instant/atlas/index.html?appid=61647d2768644865918810f714a2e692&webmap=b1fea5e3f40744aba8341c173220b580" target="_blank" rel="noopener">Open the map →</a>
+        </div>
+
+        <div class="help-card">
+          <h3>Become a County Champion</h3>
+          <p>Help identify stories and encourage other members, families, and leaders to participate.</p>
+          <a href="#contact">Get involved →</a>
+        </div>
+
+        <div class="help-card">
+          <h3>Interview Someone</h3>
+          <p>Talk with a 4-H member, volunteer, leader, alumni, or community member and preserve their memories.</p>
+          <a href="https://survey123.arcgis.com/share/dffd83fe7fc2405995ee7b7bc59e203b" target="_blank" rel="noopener">Submit a story →</a>
+        </div>
+        <div class="help-card">
+          <h3>Share the Project</h3>
+          <p>Invite your county, club, or family to take part. </p>
+          <a href="#" onclick="navigator.clipboard.writeText('https://newengland-4h-125historymapping.vercel.app/'); this.textContent='Copied! ✓'; setTimeout(() => this.textContent='Copy Link →', 2000); return false;">
+  Copy Link →
+</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRONG SUBMISSIONS -->
+  <section class="section">
+    <div class="container two-col">
+      <div class="section-heading">
+        <div class="eyebrow">Quality guide</div>
+        <h2>Strong Submissions Include</h2>
+        <p>
+          Good historical entries are specific, supported by evidence, and respectful
+          of the people whose stories are being shared.
+        </p>
+      </div>
+
+      <div class="list-card">
+        <ul>
+          <li>The five W's: who, what, when, where, and why</li>
+          <li>Photographs or historical documents</li>
+          <li>Newspaper articles, programs, or other published evidence</li>
+          <li>County or club records</li>
+          <li>Awards, letters, and verified memories</li>
+          <li>Permission to share personal photographs or private records</li>
+          <li>Accurate, respectful, community-centered storytelling</li>
+        </ul>
+        <div class="quote">
+          Only share materials you are authorized to use. Ask for permission
+          before submitting personal photographs, recordings, names, or private documents.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="bottom-banner">
+    <div class="container">
+      <h2>One clover at a time.</h2>
+      <p>
+        Explore the map, discover the history around you, and help preserve the
+        4-H experiences that deserve to be remembered.
+      </p>
+      <a class="button secondary"
+         href="https://4-h.maps.arcgis.com/apps/instant/atlas/index.html?appid=61647d2768644865918810f714a2e692&webmap=b1fea5e3f40744aba8341c173220b580"
+         target="_blank" rel="noopener">
+        Explore the 4-H History Map
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT CARD -->
+  <section class="contact" id="contact">
+    <div class="contact-card">
+      <div>
+        <div class="label">New England Project Leader</div>
+        <h2>Sai Hitesh Vuppala</h2>
+        <p>National 4-H GIS Leadership Team, Massachusetts</p>
+      </div>
+
+      <div class="contact-info">
+        <p><strong>4-H 125 GIS Project</strong></p>
+        <p>Contact me with any queries or reach out to your local 4-H educator to make sure your county is properly represented!</p>
+        <br>
+        <p><strong>Email:</strong> hiteshvuppala@national4hgeospatialteam.us</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>125 New England History Map • Mapping history, one story at a time.</footer>
+
+</body>
+</html>
