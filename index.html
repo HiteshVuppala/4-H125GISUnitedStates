@@ -288,16 +288,27 @@
       background: #f3f1e7;
     }
 
+    .contact-heading {
+      max-width: 760px;
+      margin-bottom: 35px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
     .contact-card {
-      max-width: 900px;
-      margin: auto;
+      min-height: 245px;
       background: var(--white);
       border: 1px solid #d9e1d3;
       border-radius: 28px;
-      padding: 42px;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 40px;
+      padding: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
       box-shadow: 0 18px 50px rgba(49,92,53,.08);
     }
 
@@ -313,6 +324,7 @@
     .contact-card h2 {
       font-size: 36px;
     }
+   
 
     .contact-info {
       color: var(--muted);
@@ -543,25 +555,43 @@
       </a>
     </div>
   </section>
-
-  <!-- CONTACT CARD -->
+<!-- Contact Grid -->
   <section class="contact" id="contact">
-    <div class="contact-card">
-      <div>
-        <div class="label">New England Project Leader</div>
-        <h2>Sai Hitesh Vuppala</h2>
-        <p>National 4-H GIS Leadership Team, Massachusetts</p>
+    <div class="container">
+      <div class="section-heading contact-heading">
+        <div class="eyebrow">Get in touch</div>
+        <h2>Connect With the Project</h2>
+        <p>Have a question, story, or idea? Use either contact card below.</p>
       </div>
 
-      <div class="contact-info">
-        <p><strong>4-H 125 GIS Project</strong></p>
-        <p>Contact me with any queries or reach out to your local 4-H educator to make sure your county is properly represented!</p>
-        <br>
-        <p><strong>Email:</strong> hiteshvuppala@national4hgeospatialteam.us</p>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div>
+            <div class="label">Project Contact</div>
+            <h2>Cameron Graham</h2>
+          </div>
+          <div class="contact-info">
+            <p><strong>Email:</strong> your-email@example.com</p>
+            <p><strong>Organization:</strong> GIS National 4H Leadership Team</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div>
+            <div class="label">Project Contact</div>
+            <h2>Hitesh Vuppala</h2>
+          </div>
+          <div class="contact-info">
+            <p><strong>Email:</strong> hiteshvuppala@national4hgeospatialteam.us</p>
+            <p><strong>Organization:</strong> GIS National 4H Leadership Team</p>
+            
+          </div>
+        </div>
       </div>
     </div>
   </section>
-
+  
+///////
   <footer>125 New England History Map • Mapping history, one story at a time.</footer>
 
 </body>
